@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campeonato de Billar</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="cabecera">
+    <h1 id="titulo-jornada">JORNADA 8</h1>
+    <p id="fechas-jornada">(04/11 al 13/11 de 2026)</p>
+    <div class="subtexto">Pulsa en cada partido para fijar fecha o apuntarte de juez</div>
+  </header>
+
+  <main id="lista-partidos" class="contenedor-partidos">
+    <!-- Aquí se cargan las tarjetas -->
+  </main>
+
+  <!-- Ventana para elegir Juez o Auxiliar -->
+  <div id="modal-juez" class="modal oculto">
+    <div class="modal-contenido">
+      <h3 id="modal-juez-titulo">Selecciona tu nombre</h3>
+      <div id="lista-socios" class="grid-socios"></div>
+      <button class="btn btn-cerrar" onclick="cerrarModales()">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Ventana para elegir Día y Hora -->
+  <div id="modal-fecha" class="modal oculto">
+    <div class="modal-contenido">
+      <h3>Fijar fecha del partido</h3>
+      <label class="etiqueta">Día:</label>
+      <input type="date" id="input-fecha" class="input-grande">
+      
+      <label class="etiqueta">Hora:</label>
+      <input type="time" id="input-hora" class="input-grande">
+
+      <div class="fila-botones">
+        <button class="btn btn-guardar" onclick="guardarFecha()">Guardar</button>
+        <button class="btn btn-cerrar" onclick="cerrarModales()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ventana para meter el Acta del Partido -->
+  <div id="modal-acta" class="modal oculto">
+    <div class="modal-contenido">
+      <h3>Acta del Partido</h3>
+      
+      <div class="bloque-jugador-acta">
+        <strong id="acta-nom-j1">JUGADOR 1</strong>
+        <div class="fila-inputs-acta">
+          <div>
+            <label class="etiqueta-sub">Carambolas</label>
+            <input type="number" id="acta-car-j1" class="input-acta" placeholder="0">
+          </div>
+          <div>
+            <label class="etiqueta-sub">A 3 Bandas</label>
+            <input type="number" id="acta-3b-j1" class="input-acta" placeholder="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="bloque-jugador-acta">
+        <strong id="acta-nom-j2">JUGADOR 2</strong>
+        <div class="fila-inputs-acta">
+          <div>
+            <label class="etiqueta-sub">Carambolas</label>
+            <input type="number" id="acta-car-j2" class="input-acta" placeholder="0">
+          </div>
+          <div>
+            <label class="etiqueta-sub">A 3 Bandas</label>
+            <input type="number" id="acta-3b-j2" class="input-acta" placeholder="0">
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label class="etiqueta-sub">Tiempo de juego (minutos)</label>
+        <input type="number" id="acta-minutos" class="input-grande" placeholder="Ej: 65">
+      </div>
+
+      <div class="fila-botones">
+        <button class="btn btn-guardar" onclick="guardarActa()">Guardar Acta</button>
+        <button class="btn btn-cerrar" onclick="cerrarModales()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts de Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <script src="app.js"></script>
+</body>
+</html>
