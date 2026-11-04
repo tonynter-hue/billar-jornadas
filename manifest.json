@@ -1,0 +1,15 @@
+{
+  "name": "Jornadas Billar Elcano",
+  "short_name": "Jornadas",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1a1e24",
+  "theme_color": "#1a1e24",
+  "icons": [
+    {
+      "src": "logo-512-jornadas.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

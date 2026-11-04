@@ -222,3 +222,12 @@ function formatearFecha(f) {
   const partes = f.split("-");
   return `${partes[2]}/${partes[1]}`;
 }
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js");
+}
+
+// Registro de PWA (Service Worker)
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js");
+}
