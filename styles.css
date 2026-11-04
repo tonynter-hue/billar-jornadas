@@ -14,100 +14,131 @@ body {
   align-items: center;
 }
 
+/* Cabecera */
 .cabecera {
-  width: 100%;
-  max-width: 500px;
-  text-align: center;
-  background-color: #262c36;
-  padding: 16px;
+  background-color: #112942;
+  border: 1px solid #1d4ed8;
   border-radius: 12px;
+  padding: 14px 18px;
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
   margin-bottom: 16px;
-  border: 1px solid #3b4252;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+}
+
+.cabecera-top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
 .cabecera h1 {
-  font-size: 1.6rem;
-  letter-spacing: 1px;
+  font-size: 1.4rem;
   color: #38bdf8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.cabecera p {
-  font-size: 1.1rem;
-  color: #cbd5e1;
-  margin-top: 4px;
-  font-weight: bold;
+.btn-candado {
+  position: absolute;
+  right: 0;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: opacity 0.2s;
 }
 
-.subtexto {
+.btn-candado:hover {
+  opacity: 1;
+}
+
+.fechas-jornada {
   font-size: 0.95rem;
-  color: #94a3b8;
-  margin-top: 8px;
+  color: #cbd5e1;
+  margin: 4px 0 6px 0;
 }
 
+.subtitulo {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+
+.btn-pdf {
+  background-color: #0284c7;
+  color: #ffffff;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+/* Contenedor Partidos */
 .contenedor-partidos {
-  width: 100%;
-  max-width: 500px;
   display: flex;
   flex-direction: column;
   gap: 14px;
+  max-width: 500px;
+  width: 100%;
 }
 
-/* Tarjeta de cada partido */
 .tarjeta-partido {
-  background-color: #262c36;
-  border: 1px solid #3b4252;
-  border-radius: 12px;
-  padding: 14px;
+  background-color: #242c37;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
 .partido-titulo {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 700;
   color: #94a3b8;
-  font-weight: bold;
   text-transform: uppercase;
 }
 
 .jugadores {
-  font-size: 1.15rem;
-  font-weight: bold;
-  color: #ffffff;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #1e242c;
-  padding: 10px 12px;
-  border-radius: 8px;
+  font-weight: bold;
+  font-size: 0.95rem;
+  background-color: #171d24;
+  padding: 10px;
+  border-radius: 6px;
 }
 
 .vs {
-  font-size: 0.85rem;
   color: #38bdf8;
-  margin: 0 6px;
+  font-size: 0.8rem;
 }
 
-/* Botones táctiles grandes */
+/* Botones */
 .btn {
-  width: 100%;
-  padding: 12px;
-  font-size: 1rem;
-  font-weight: bold;
-  border-radius: 8px;
   border: none;
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 0.9rem;
   cursor: pointer;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
 }
 
 .btn-horario {
   background-color: #0284c7;
   color: #ffffff;
+  font-weight: bold;
 }
 
 .btn-horario.fijado {
-  background-color: #166534;
-  color: #86efac;
+  background-color: #0f766e;
 }
 
 .fila-jueces {
@@ -118,138 +149,138 @@ body {
 
 .btn-juez {
   background-color: #334155;
-  color: #cbd5e1;
-  font-size: 0.9rem;
-  padding: 10px 6px;
+  color: #f1f5f9;
 }
 
 .btn-juez.asignado {
-  background-color: #1e3a8a;
-  color: #93c5fd;
-  border: 1px solid #3b82f6;
+  background-color: #475569;
+  border: 1px solid #64748b;
+  font-weight: 600;
 }
 
-/* Ventana emergente (Modal) */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.75);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
-  z-index: 100;
-}
-
-.oculto {
-  display: none;
-}
-
-.modal-contenido {
-  background-color: #262c36;
-  border: 1px solid #3b4252;
-  border-radius: 12px;
-  padding: 20px;
-  width: 100%;
-  max-width: 420px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* Ventana emergente (Modal) */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.75);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;
-  z-index: 100;
-}
-
-.oculto {
-  display: none;
-}
-
-.modal-contenido {
-  background-color: #262c36;
-  border: 1px solid #3b4252;
-  border-radius: 12px;
-  padding: 20px;
-  width: 100%;
-  max-width: 420px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* Botones de selección de socios */
-.grid-socios {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  max-height: 280px;
-  overflow-y: auto;
-  padding-right: 4px;
-}
-
-.btn-socio {
-  background-color: #334155;
-  color: #ffffff;
-  padding: 10px 6px;
-  font-size: 0.85rem;
+.btn-acta {
+  background-color: #f59e0b;
+  color: #000000;
   font-weight: bold;
-  border-radius: 6px;
-  border: 1px solid #475569;
+}
+
+.caja-resultado {
+  background-color: #064e3b;
+  border: 1px solid #059669;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  color: #a7f3d0;
+  font-size: 0.95rem;
+  line-height: 1.4;
   cursor: pointer;
+}
+
+/* Modales */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  padding: 16px;
+}
+
+.modal.oculto {
+  display: none;
+}
+
+.modal-contenido {
+  background-color: #1e293b;
+  padding: 20px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-ancho {
+  max-width: 500px;
+}
+
+.modal-contenido h3 {
+  color: #38bdf8;
+  font-size: 1.1rem;
   text-align: center;
 }
 
-/* Entradas de fecha/hora y botones de acción */
 .etiqueta {
-  font-size: 0.95rem;
-  font-weight: bold;
-  color: #cbd5e1;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin-top: 4px;
 }
 
 .input-grande {
   width: 100%;
-  padding: 12px;
-  font-size: 1.1rem;
-  border-radius: 8px;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 6px;
   border: 1px solid #475569;
   background-color: #0f172a;
   color: #ffffff;
 }
 
 .fila-botones {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
 }
 
 .btn-guardar {
-  background-color: #16a34a;
-  color: #ffffff;
+  background-color: #10b981;
+  color: white;
+  flex: 1;
+  font-weight: bold;
+}
+
+.btn-peligro {
+  background-color: #dc2626;
+  color: white;
+  flex: 1;
 }
 
 .btn-cerrar {
-  background-color: #475569;
-  color: #ffffff;
+  background-color: #64748b;
+  color: white;
+  flex: 1;
 }
 
-/* Estilos para el formulario del Acta */
+.lista-botones-socios {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.btn-socio {
+  background-color: #334155;
+  color: #f8fafc;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* Acta formulario */
 .bloque-jugador-acta {
-  background-color: #1e242c;
+  background-color: #0f172a;
   padding: 10px;
   border-radius: 8px;
   display: flex;
@@ -260,7 +291,6 @@ body {
 .etiqueta-sub {
   font-size: 0.8rem;
   color: #94a3b8;
-  margin-bottom: 2px;
   display: block;
 }
 
@@ -277,25 +307,88 @@ body {
   font-weight: bold;
   border-radius: 6px;
   border: 1px solid #475569;
-  background-color: #0f172a;
+  background-color: #1e293b;
   color: #ffffff;
   text-align: center;
 }
 
-/* Botón de acta y resumen de resultado */
-.btn-acta {
-  background-color: #f59e0b;
-  color: #000000;
-  font-weight: bold;
+/* Estilos de Admin */
+.campo-admin {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.caja-resultado {
-  background-color: #064e3b;
-  border: 1px solid #059669;
-  border-radius: 8px;
+.fila-partido-admin {
+  background: #0f172a;
   padding: 10px;
-  text-align: center;
-  color: #a7f3d0;
-  font-size: 0.95rem;
-  line-height: 1.4;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fila-partido-admin select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  background-color: #1e293b;
+  color: white;
+  border: 1px solid #475569;
+}
+
+/* ESTILOS DE IMPRESIÓN Y PDF */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    padding: 0;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .cabecera {
+    background-color: #ffffff !important;
+    border: 2px solid #000000 !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+    margin-bottom: 20px;
+  }
+
+  .cabecera h1 {
+    color: #000000 !important;
+  }
+
+  .fechas-jornada, .subtitulo {
+    color: #333333 !important;
+  }
+
+  .tarjeta-partido {
+    background-color: #ffffff !important;
+    border: 1px solid #000000 !important;
+    color: #000000 !important;
+    page-break-inside: avoid;
+    margin-bottom: 12px;
+  }
+
+  .jugadores {
+    background-color: #f1f5f9 !important;
+    color: #000000 !important;
+    border: 1px solid #cccccc;
+  }
+
+  .btn {
+    border: 1px solid #666666 !important;
+    background-color: #f8fafc !important;
+    color: #000000 !important;
+  }
+
+  .caja-resultado {
+    background-color: #e2e8f0 !important;
+    color: #000000 !important;
+    border: 1px solid #000000 !important;
+  }
 }

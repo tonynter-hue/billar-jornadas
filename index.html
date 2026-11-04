@@ -11,27 +11,31 @@
 </head>
 <body>
 
+  <!-- Cabecera de la App -->
   <header class="cabecera">
-    <h1 id="titulo-jornada">JORNADA 8</h1>
-    <p id="fechas-jornada">(04/11 al 13/11 de 2026)</p>
-    <div class="subtexto">Pulsa en cada partido para fijar fecha o apuntarte de juez</div>
+    <div class="cabecera-top">
+      <h1 id="titulo-jornada">JORNADA 8</h1>
+      <button class="btn-candado" onclick="solicitarPinAdmin()" title="Administrar Jornada">⚙️</button>
+    </div>
+    <div class="fechas-jornada" id="fechas-jornada">(04/11 al 13/11 de 2026)</div>
+    <div class="subtitulo">Pulsa en cada partido para fijar fecha o apuntarte de juez</div>
+    <button class="btn btn-pdf no-print" onclick="descargarPDF()">📄 Guardar Jornada en PDF</button>
   </header>
 
-  <main id="lista-partidos" class="contenedor-partidos">
-    <!-- Aquí se cargan las tarjetas -->
-  </main>
+  <!-- Lista de Partidos -->
+  <main id="lista-partidos" class="contenedor-partidos"></main>
 
-  <!-- Ventana para elegir Juez o Auxiliar -->
-  <div id="modal-juez" class="modal oculto">
+  <!-- Modal para elegir Juez o Auxiliar -->
+  <div id="modal-juez" class="modal oculto no-print">
     <div class="modal-contenido">
-      <h3 id="modal-juez-titulo">Selecciona tu nombre</h3>
-      <div id="lista-socios" class="grid-socios"></div>
+      <h3 id="modal-juez-titulo">Elegir Juez</h3>
+      <div id="lista-socios" class="lista-botones-socios"></div>
       <button class="btn btn-cerrar" onclick="cerrarModales()">Cancelar</button>
     </div>
   </div>
 
-  <!-- Ventana para elegir Día y Hora -->
-  <div id="modal-fecha" class="modal oculto">
+  <!-- Modal para elegir Día y Hora -->
+  <div id="modal-fecha" class="modal oculto no-print">
     <div class="modal-contenido">
       <h3>Fijar fecha del partido</h3>
       <label class="etiqueta">Día:</label>
@@ -42,13 +46,14 @@
 
       <div class="fila-botones">
         <button class="btn btn-guardar" onclick="guardarFecha()">Guardar</button>
+        <button class="btn btn-peligro" onclick="borrarFecha()">Borrar fecha</button>
         <button class="btn btn-cerrar" onclick="cerrarModales()">Cancelar</button>
       </div>
     </div>
   </div>
 
-  <!-- Ventana para meter el Acta del Partido -->
-  <div id="modal-acta" class="modal oculto">
+  <!-- Modal para meter el Acta del Partido -->
+  <div id="modal-acta" class="modal oculto no-print">
     <div class="modal-contenido">
       <h3>Acta del Partido</h3>
       
@@ -87,12 +92,38 @@
 
       <div class="fila-botones">
         <button class="btn btn-guardar" onclick="guardarActa()">Guardar Acta</button>
+        <button class="btn btn-peligro" onclick="borrarActa()">Borrar Acta</button>
         <button class="btn btn-cerrar" onclick="cerrarModales()">Cancelar</button>
       </div>
     </div>
   </div>
 
-  <!-- Scripts de Firebase -->
+  <!-- Modal Exclusivo de Administrador (para cambiar de jornada y partidos) -->
+  <div id="modal-admin" class="modal oculto no-print">
+    <div class="modal-contenido modal-ancho">
+      <h3>Configurar Nueva Jornada</h3>
+      
+      <div class="campo-admin">
+        <label class="etiqueta">Número de Jornada:</label>
+        <input type="text" id="admin-num-jornada" class="input-grande" placeholder="Ej: JORNADA 9">
+      </div>
+
+      <div class="campo-admin">
+        <label class="etiqueta">Rango de fechas:</label>
+        <input type="text" id="admin-fechas" class="input-grande" placeholder="Ej: (14/11 al 21/11 de 2026)">
+      </div>
+
+      <h4>Emparejamientos (6 partidos)</h4>
+      <div id="admin-contenedor-partidos"></div>
+
+      <div class="fila-botones">
+        <button class="btn btn-guardar" onclick="guardarNuevaJornadaAdmin()">Activar esta Jornada</button>
+        <button class="btn btn-cerrar" onclick="cerrarModales()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 

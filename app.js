@@ -10,9 +10,11 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const docJornada = db.collection("jornadas").doc("jornada_8");
 
-// 2. Socios y estructura inicial de la jornada
+// Documento en Firestore que guarda la jornada ACTIVA que ven todos
+const docJornadaActiva = db.collection("jornadas").doc("activa");
+
+// 2. Socios oficiales
 const socios = [
   "ALFONSO SANTOS", "FCO. JAVIER SANTOS", "JAVIER Mª DOMINGUEZ",
   "JOAQUIN BARBERO", "JOSE ANTONIO ELENA", "JOSE GONZALEZ",
@@ -20,41 +22,50 @@ const socios = [
   "MIGUEL FRADE", "PACO MADRIGAL", "PACO VIDAL"
 ];
 
-let partidos = [
-  { id: 1, j1: "MIGUEL FRADE", j2: "PACO VIDAL", fecha: "", hora: "", juez: "", aux: "", resultado: null },
-  { id: 2, j1: "JOSE Mª CARCELAN", j2: "JOSE ANTONIO ELENA", fecha: "", hora: "", juez: "", aux: "", resultado: null },
-  { id: 3, j1: "FCO. JAVIER SANTOS", j2: "JOAQUIN BARBERO", fecha: "", hora: "", juez: "", aux: "", resultado: null },
-  { id: 4, j1: "JUAN RODRIGUEZ", j2: "JOSE GONZALEZ", fecha: "", hora: "", juez: "", aux: "", resultado: null },
-  { id: 5, j1: "PACO MADRIGAL", j2: "JUAN COSTA", fecha: "", hora: "", juez: "", aux: "", resultado: null },
-  { id: 6, j1: "JAVIER Mª DOMINGUEZ", j2: "ALFONSO SANTOS", fecha: "", hora: "", juez: "", aux: "", resultado: null }
-];
+// Estructura por defecto si la base de datos estuviera vacía
+let datosJornada = {
+  titulo: "JORNADA 8",
+  fechas: "(04/11 al 13/11 de 2026)",
+  partidos: [
+    { id: 1, j1: "MIGUEL FRADE", j2: "PACO VIDAL", fecha: "", hora: "", juez: "", aux: "", resultado: null },
+    { id: 2, j1: "JOSE Mª CARCELAN", j2: "JOSE ANTONIO ELENA", fecha: "", hora: "", juez: "", aux: "", resultado: null },
+    { id: 3, j1: "FCO. JAVIER SANTOS", j2: "JOAQUIN BARBERO", fecha: "", hora: "", juez: "", aux: "", resultado: null },
+    { id: 4, j1: "JUAN RODRIGUEZ", j2: "JOSE GONZALEZ", fecha: "", hora: "", juez: "", aux: "", resultado: null },
+    { id: 5, j1: "PACO MADRIGAL", j2: "JUAN COSTA", fecha: "", hora: "", juez: "", aux: "", resultado: null },
+    { id: 6, j1: "JAVIER Mª DOMINGUEZ", j2: "ALFONSO SANTOS", fecha: "", hora: "", juez: "", aux: "", resultado: null }
+  ]
+};
 
 let partidoSeleccionadoId = null;
 let rolSeleccionado = null;
-const contenedor = document.getElementById("lista-partidos");
+const PIN_ADMIN = "1234"; // Puedes cambiar este PIN por el que quieras
 
-// 3. Escuchar cambios en la nube en tiempo real
-docJornada.onSnapshot((doc) => {
+const contenedor = document.getElementById("lista-partidos");
+const tituloJornada = document.getElementById("titulo-jornada");
+const fechasJornada = document.getElementById("fechas-jornada");
+
+// 3. Escuchar Firestore en tiempo real
+docJornadaActiva.onSnapshot((doc) => {
   if (doc.exists && doc.data().partidos) {
-    partidos = doc.data().partidos;
-    pintarPartidos();
+    datosJornada = doc.data();
+    actualizarVista();
   } else {
-    // Si la jornada no existe aún en Firestore, se sube la plantilla base
-    docJornada.set({ partidos: partidos });
-    pintarPartidos();
+    docJornadaActiva.set(datosJornada);
+    actualizarVista();
   }
 });
 
-// 4. Guardar datos en Firestore
 function sincronizarConNube() {
-  docJornada.set({ partidos: partidos });
+  docJornadaActiva.set(datosJornada);
 }
 
-// 5. Renderizado de tarjetas
-function pintarPartidos() {
+// 4. Pintar en pantalla
+function actualizarVista() {
+  tituloJornada.textContent = datosJornada.titulo || "JORNADA";
+  fechasJornada.textContent = datosJornada.fechas || "";
   contenedor.innerHTML = "";
 
-  partidos.forEach((p, index) => {
+  datosJornada.partidos.forEach((p, index) => {
     const textoHorario = (p.fecha && p.hora) 
       ? `📅 ${formatearFecha(p.fecha)} - ${p.hora}` 
       : `📅 + PONER DÍA Y HORA`;
@@ -102,7 +113,7 @@ function pintarPartidos() {
   });
 }
 
-// 6. Asignación de Juez / Auxiliar
+// 5. Asignación de Juez / Auxiliar (con opción de desasignar)
 function abrirModalJuez(idPartido, rol) {
   partidoSeleccionadoId = idPartido;
   rolSeleccionado = rol;
@@ -112,6 +123,13 @@ function abrirModalJuez(idPartido, rol) {
 
   const listaSocios = document.getElementById("lista-socios");
   listaSocios.innerHTML = "";
+
+  // Botón para vaciar
+  const btnQuitar = document.createElement("button");
+  btnQuitar.className = "btn-socio btn-peligro";
+  btnQuitar.textContent = "❌ Dejar sin asignar";
+  btnQuitar.onclick = () => asignarSocio("");
+  listaSocios.appendChild(btnQuitar);
 
   socios.forEach(nombre => {
     const btn = document.createElement("button");
@@ -125,7 +143,7 @@ function abrirModalJuez(idPartido, rol) {
 }
 
 function asignarSocio(nombre) {
-  const partido = partidos.find(p => p.id === partidoSeleccionadoId);
+  const partido = datosJornada.partidos.find(p => p.id === partidoSeleccionadoId);
   if (partido) {
     if (rolSeleccionado === "juez") partido.juez = nombre;
     if (rolSeleccionado === "aux") partido.aux = nombre;
@@ -134,10 +152,10 @@ function asignarSocio(nombre) {
   cerrarModales();
 }
 
-// 7. Fijar Día y Hora
+// 6. Fecha y Hora (con opción de borrar)
 function abrirModalFecha(idPartido) {
   partidoSeleccionadoId = idPartido;
-  const partido = partidos.find(p => p.id === idPartido);
+  const partido = datosJornada.partidos.find(p => p.id === idPartido);
 
   document.getElementById("input-fecha").value = partido.fecha || "";
   document.getElementById("input-hora").value = partido.hora || "";
@@ -149,7 +167,7 @@ function guardarFecha() {
   const fecha = document.getElementById("input-fecha").value;
   const hora = document.getElementById("input-hora").value;
 
-  const partido = partidos.find(p => p.id === partidoSeleccionadoId);
+  const partido = datosJornada.partidos.find(p => p.id === partidoSeleccionadoId);
   if (partido) {
     partido.fecha = fecha;
     partido.hora = hora;
@@ -158,10 +176,20 @@ function guardarFecha() {
   cerrarModales();
 }
 
-// 8. Formulario de Acta
+function borrarFecha() {
+  const partido = datosJornada.partidos.find(p => p.id === partidoSeleccionadoId);
+  if (partido) {
+    partido.fecha = "";
+    partido.hora = "";
+    sincronizarConNube();
+  }
+  cerrarModales();
+}
+
+// 7. Acta (con opción de borrar)
 function abrirModalActa(idPartido) {
   partidoSeleccionadoId = idPartido;
-  const partido = partidos.find(p => p.id === idPartido);
+  const partido = datosJornada.partidos.find(p => p.id === idPartido);
 
   document.getElementById("acta-nom-j1").textContent = partido.j1;
   document.getElementById("acta-nom-j2").textContent = partido.j2;
@@ -195,7 +223,7 @@ function guardarActa() {
     return;
   }
 
-  const partido = partidos.find(p => p.id === partidoSeleccionadoId);
+  const partido = datosJornada.partidos.find(p => p.id === partidoSeleccionadoId);
   if (partido) {
     partido.resultado = {
       carJ1: parseInt(carJ1, 10),
@@ -209,10 +237,95 @@ function guardarActa() {
   cerrarModales();
 }
 
+function borrarActa() {
+  const partido = datosJornada.partidos.find(p => p.id === partidoSeleccionadoId);
+  if (partido) {
+    partido.resultado = null;
+    sincronizarConNube();
+  }
+  cerrarModales();
+}
+
+// 8. Panel de Administrador (Solo tú)
+function solicitarPinAdmin() {
+  const pin = prompt("Introduce el PIN de Administrador:");
+  if (pin === PIN_ADMIN) {
+    abrirModalAdmin();
+  } else if (pin !== null) {
+    alert("PIN incorrecto.");
+  }
+}
+
+function abrirModalAdmin() {
+  document.getElementById("admin-num-jornada").value = datosJornada.titulo;
+  document.getElementById("admin-fechas").value = datosJornada.fechas;
+
+  const contenedorEmp = document.getElementById("admin-contenedor-partidos");
+  contenedorEmp.innerHTML = "";
+
+  datosJornada.partidos.forEach((p, idx) => {
+    const bloque = document.createElement("div");
+    bloque.className = "fila-partido-admin";
+    bloque.innerHTML = `
+      <strong>Partido ${idx + 1}</strong>
+      <select id="admin-j1-${idx}">${generarOpcionesSocios(p.j1)}</select>
+      <div style="text-align:center; font-size:0.75rem; color:#38bdf8;">VS</div>
+      <select id="admin-j2-${idx}">${generarOpcionesSocios(p.j2)}</select>
+    `;
+    contenedorEmp.appendChild(bloque);
+  });
+
+  document.getElementById("modal-admin").classList.remove("oculto");
+}
+
+function generarOpcionesSocios(seleccionado) {
+  return socios.map(s => `<option value="${s}" ${s === seleccionado ? "selected" : ""}>${s}</option>`).join("");
+}
+
+function guardarNuevaJornadaAdmin() {
+  const nuevoTitulo = document.getElementById("admin-num-jornada").value.trim();
+  const nuevasFechas = document.getElementById("admin-fechas").value.trim();
+
+  // Guardar en histórico antes de sobreescribir (para no perder la que termina)
+  const idHistorico = datosJornada.titulo.toLowerCase().replace(/\s+/g, "_");
+  db.collection("jornadas_historico").doc(idHistorico).set(datosJornada);
+
+  // Crear la nueva estructura de partidos limpia
+  const nuevosPartidos = [];
+  for (let i = 0; i < 6; i++) {
+    const j1 = document.getElementById(`admin-j1-${i}`).value;
+    const j2 = document.getElementById(`admin-j2-${i}`).value;
+    nuevosPartidos.push({
+      id: i + 1,
+      j1: j1,
+      j2: j2,
+      fecha: "",
+      hora: "",
+      juez: "",
+      aux: "",
+      resultado: null
+    });
+  }
+
+  datosJornada = {
+    titulo: nuevoTitulo || "JORNADA",
+    fechas: nuevasFechas || "",
+    partidos: nuevosPartidos
+  };
+
+  sincronizarConNube();
+  cerrarModales();
+  alert("¡Nueva jornada activada con éxito!");
+}
+
+// 9. Descargar en PDF
+function descargarPDF() {
+  window.print();
+}
+
+// 10. Auxiliares
 function cerrarModales() {
-  document.getElementById("modal-juez").classList.add("oculto");
-  document.getElementById("modal-fecha").classList.add("oculto");
-  document.getElementById("modal-acta").classList.add("oculto");
+  document.querySelectorAll(".modal").forEach(m => m.classList.add("oculto"));
   partidoSeleccionadoId = null;
   rolSeleccionado = null;
 }
@@ -223,11 +336,7 @@ function formatearFecha(f) {
   return `${partes[2]}/${partes[1]}`;
 }
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("./sw.js");
-}
-
-// Registro de PWA (Service Worker)
+// Registro PWA
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("./sw.js");
 }
