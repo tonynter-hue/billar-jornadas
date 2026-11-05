@@ -81,9 +81,9 @@ function actualizarVista() {
     if (p.resultado) {
       bloqueActa = `
         <div class="caja-resultado" onclick="abrirModalActa(${p.id})">
-          <div><strong>FINALIZADO</strong> (${p.resultado.minutos} min)</div>
-          <div>${p.j1}: <strong>${p.resultado.carJ1}</strong> (${p.resultado.tresBJ1} a 3B)</div>
-          <div>${p.j2}: <strong>${p.resultado.carJ2}</strong> (${p.resultado.tresBJ2} a 3B)</div>
+          <div style="font-weight: bold; margin-bottom: 3px;">✅ ACTA CERRADA (${p.resultado.minutos} min de juego)</div>
+          <div>• <strong>${p.j1}:</strong> ${p.resultado.carJ1} carambolas (${p.resultado.tresBJ1} a 3 bandas)</div>
+          <div>• <strong>${p.j2}:</strong> ${p.resultado.carJ2} carambolas (${p.resultado.tresBJ2} a 3 bandas)</div>
         </div>
       `;
     } else {
